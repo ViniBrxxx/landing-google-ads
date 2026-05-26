@@ -48,7 +48,7 @@ export const Hero = () => {
             Cadastro gratuito para empresas e revendedores
           </span>
           <h1 className="mt-4 font-display text-3xl font-extrabold leading-[1.05] text-balance sm:text-4xl lg:text-5xl xl:text-6xl">
-            Revenda produtos de alta procura e aumente sua margem comprando direto da distribuidora
+            Revenda produtos de alta procura e <span style={{ color: '#FFD700' }}>lucre até 100%</span> comprando direto da distribuidora
           </h1>
           <p className="mt-4 max-w-xl text-base text-white/90 sm:text-lg">
             Mais de 4.000 produtos entre cosméticos, higiene, perfumaria e utilidades para quem deseja
