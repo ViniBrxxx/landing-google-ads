@@ -8,6 +8,7 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "0.0.0.0",
     port: Number(process.env.PORT) || 8080,
+    allowedHosts: ["fonil-lp-google-ads-4.hqzrjv.easypanel.host"],
     hmr: {
       overlay: false,
     },
