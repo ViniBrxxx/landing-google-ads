@@ -1,10 +1,9 @@
-import { BriefcaseBusiness, Store, ShoppingBasket, Scissors } from "lucide-react";
+import { Store, Repeat, TrendingUp } from "lucide-react";
 
 const audiences = [
-  { icon: BriefcaseBusiness, title: "Revendedores", desc: "Produtos para quem vende pelo WhatsApp, redes sociais ou atendimento direto." },
-  { icon: Store, title: "Lojas", desc: "Abastecimento para operações físicas e online." },
-  { icon: ShoppingBasket, title: "Mercados e Farmácias", desc: "Mix de produtos com demanda recorrente." },
-  { icon: Scissors, title: "Salões", desc: "Produtos de beleza e higiene com alta saída." },
+  { icon: Store, title: "Tenho uma loja", desc: "Abasteça seu estoque comprando direto da distribuidora." },
+  { icon: Repeat, title: "Já revendo produtos", desc: "Amplie seu portfólio com categorias de alta procura." },
+  { icon: TrendingUp, title: "Quero crescer meu faturamento", desc: "Tenha acesso a condições comerciais voltadas para revendedores." },
 ];
 
 export const Problem = () => (
@@ -13,11 +12,11 @@ export const Problem = () => (
       <div className="reveal mx-auto max-w-2xl text-center">
         <span className="text-sm font-bold uppercase tracking-wider text-primary">Oportunidade de revenda</span>
         <h2 className="mt-2 font-display text-3xl font-extrabold text-balance sm:text-4xl">
-          Seja para revender ou abastecer sua loja, encontre produtos com alta procura.
+          Para quem é essa oportunidade?
         </h2>
       </div>
 
-      <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-10 grid gap-4 md:grid-cols-3">
         {audiences.map(({ icon: Icon, title, desc }, i) => (
           <div
             key={title}

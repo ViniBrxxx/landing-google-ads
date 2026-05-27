@@ -19,18 +19,28 @@ const NEW_TRACKING_URL = "/api/new-tracking/leads";
 const NEW_TRACKING_KEY = "u7hjat5pjvfs8m7ls2ndwefn";
 
 const GOALS = [
-  "Revender produtos",
-  "Abastecer minha loja",
-  "Encontrar produtos com maior margem",
-  "Ampliar meu mix de produtos",
-  "Encontrar um fornecedor",
+  "Complementar minha renda",
+  "Começar um negócio de revenda",
+  "Revender na minha loja",
+  "Encontrar fornecedor para meu negócio",
+  "Ampliar meu portfólio atual",
 ];
 
 const INVESTMENTS = [
-  "Até R$ 800",
-  "Entre R$ 800 e R$ 3.000",
-  "Entre R$ 3.000 e R$ 10.000",
-  "Acima de R$ 10.000",
+  "Até R$ 500",
+  "R$ 500 a R$ 1.000",
+  "R$ 1.000 a R$ 3.000",
+  "Acima de R$ 3.000",
+];
+
+const SEGMENTS = [
+  "Loja de variedades",
+  "Loja de cosméticos",
+  "Mercado",
+  "Farmácia",
+  "Revendedor",
+  "Distribuidor",
+  "Outro",
 ];
 
 const STATES = ["Maranhão (MA)", "Piauí (PI)"];
@@ -113,6 +123,30 @@ async function sendNewTracking(
   }
 }
 
+function maskCNPJ(v: string): string {
+  const d = v.replace(/\D/g, "").slice(0, 14);
+  if (d.length <= 2) return d;
+  if (d.length <= 5) return `${d.slice(0, 2)}.${d.slice(2)}`;
+  if (d.length <= 8) return `${d.slice(0, 2)}.${d.slice(2, 5)}.${d.slice(5)}`;
+  if (d.length <= 12) return `${d.slice(0, 2)}.${d.slice(2, 5)}.${d.slice(5, 8)}/${d.slice(8)}`;
+  return `${d.slice(0, 2)}.${d.slice(2, 5)}.${d.slice(5, 8)}/${d.slice(8, 12)}-${d.slice(12)}`;
+}
+
+function isValidCNPJ(cnpj: string): boolean {
+  const d = cnpj.replace(/\D/g, "");
+  if (d.length !== 14 || /^(\d)\1+$/.test(d)) return false;
+  const calc = (str: string, len: number) => {
+    let sum = 0;
+    let pos = len - 7;
+    for (let i = len; i >= 1; i--) {
+      sum += +str[len - i] * pos--;
+      if (pos < 2) pos = 9;
+    }
+    return sum % 11 < 2 ? 0 : 11 - (sum % 11);
+  };
+  return calc(d, 12) === +d[12] && calc(d, 13) === +d[13];
+}
+
 function maskPhone(v: string): string {
   const d = v.replace(/\D/g, "").slice(0, 11);
   if (d.length === 0) return "";
@@ -125,10 +159,13 @@ function maskPhone(v: string): string {
 export const LeadForm = ({ final = false }: LeadFormProps) => {
   const [goal, setGoal] = useState("");
   const [investment, setInvestment] = useState("");
+  const [segment, setSegment] = useState("");
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
-  const [contact, setContact] = useState({ name: "", email: "", phone: "" });
+  const [contact, setContact] = useState({ name: "", email: "", phone: "", cnpj: "" });
   const [consultantLink, setConsultantLink] = useState("");
+  const [cnpjError, setCnpjError] = useState(false);
+  const [cnpjValid, setCnpjValid] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -139,27 +176,51 @@ export const LeadForm = ({ final = false }: LeadFormProps) => {
     setHasStarted(true);
   };
 
+  const handleCnpjChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = maskCNPJ(e.target.value);
+    setContact({ ...contact, cnpj: formatted });
+    const digits = formatted.replace(/\D/g, "");
+    if (digits.length === 14) {
+      const valid = isValidCNPJ(formatted);
+      setCnpjValid(valid);
+      setCnpjError(!valid);
+    } else {
+      setCnpjValid(false);
+      setCnpjError(false);
+    }
+  };
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isSubmitting) return;
 
-    if (!contact.name || !contact.email || !contact.phone || !city.trim() || !state || !goal || !investment) {
+    if (!contact.name || !contact.email || !contact.phone || !city.trim() || !state || !contact.cnpj || !goal || !investment) {
       toast.error("Preencha todos os campos obrigatórios para continuar");
+      return;
+    }
+    if (final && !segment) {
+      toast.error("Selecione seu segmento para continuar");
+      return;
+    }
+    if (!isValidCNPJ(contact.cnpj)) {
+      setCnpjError(true);
+      toast.error("CNPJ inválido. Verifique e tente novamente.");
       return;
     }
 
     setIsSubmitting(true);
     const normalizedPhone = contact.phone.replace(/\D/g, "");
+    const formSegment = final ? segment : goal;
 
     try {
       await sendToSheets({
         name: contact.name,
         email: contact.email,
         whatsapp: contact.phone,
-        cnpj: "",
+        cnpj: contact.cnpj,
         city: city.trim(),
         state,
-        segment: "",
+        segment: final ? segment : "",
         goal,
         volume: investment,
       });
@@ -173,28 +234,28 @@ export const LeadForm = ({ final = false }: LeadFormProps) => {
       contact.name,
       normalizedPhone,
       contact.email,
-      "",
+      contact.cnpj.replace(/\D/g, ""),
       state,
       city.trim(),
       goal,
-      goal,
+      formSegment,
       investment,
     );
 
     gtagEvent("generate_lead", {
       form_name: final ? "final_lead_form" : "lead_form",
       goal,
-      segment: goal,
+      segment: formSegment,
       state,
       city: city.trim(),
       volume: investment,
     });
     gtagConversion();
-    trackMetaLead({ state, city: city.trim(), segment: goal, volume: investment });
-    trackClarityLead({ state, city: city.trim(), segment: goal, volume: investment });
+    trackMetaLead({ state, city: city.trim(), segment: formSegment, volume: investment });
+    trackClarityLead({ state, city: city.trim(), segment: formSegment, volume: investment });
 
     const msg = encodeURIComponent(
-      `Olá! Sou ${contact.name}. Quero acessar o catálogo e oportunidades de revenda da Rio Piranhas. Cidade: ${city.trim()}, Estado: ${state}, Objetivo: ${goal}, Investimento aproximado: ${investment}.`,
+      `Olá! Sou ${contact.name}, CNPJ ${contact.cnpj}. Quero receber as condições comerciais da Rio Piranhas. Cidade: ${city.trim()}, Estado: ${state}, Objetivo: ${goal}, Segmento: ${formSegment}, Investimento aproximado: ${investment}.`,
     );
     const phoneNumbers: Record<string, string> = {
       "Maranhão (MA)": "558695319157",
@@ -234,9 +295,9 @@ export const LeadForm = ({ final = false }: LeadFormProps) => {
       <form onSubmit={submit} onFocus={startForm} className="animate-float-up space-y-4">
         <div>
           <h3 className="font-display text-xl font-bold sm:text-2xl">
-            Receba acesso ao catálogo e oportunidades de revenda
+            {final ? "Receba acesso às condições comerciais" : "Receba condições comerciais exclusivas"}
           </h3>
-          <p className="mt-1 text-sm text-muted-foreground">Veja produtos, categorias e condições disponíveis para sua região.</p>
+          <p className="mt-1 text-sm text-muted-foreground">Preencha seus dados para análise comercial.</p>
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">
@@ -253,7 +314,7 @@ export const LeadForm = ({ final = false }: LeadFormProps) => {
           </div>
 
           <div className="sm:col-span-2">
-            <Label htmlFor={final ? "final-email" : "email"} className="text-xs font-semibold">E-mail</Label>
+            <Label htmlFor={final ? "final-email" : "email"} className="text-xs font-semibold">Email</Label>
             <Input
               id={final ? "final-email" : "email"}
               type="email"
@@ -281,6 +342,26 @@ export const LeadForm = ({ final = false }: LeadFormProps) => {
           </div>
 
           <div>
+            <Label htmlFor={final ? "final-cnpj" : "cnpj"} className="text-xs font-semibold">CNPJ obrigatório</Label>
+            <Input
+              id={final ? "final-cnpj" : "cnpj"}
+              placeholder="00.000.000/0000-00"
+              inputMode="numeric"
+              maxLength={18}
+              autoComplete="off"
+              value={contact.cnpj}
+              onChange={handleCnpjChange}
+              onBlur={() => {
+                const digits = contact.cnpj.replace(/\D/g, "");
+                setCnpjError(digits.length > 0 && !isValidCNPJ(contact.cnpj));
+                setCnpjValid(digits.length === 14 && isValidCNPJ(contact.cnpj));
+              }}
+              className={`mt-2 ${cnpjError ? "border-red-500 focus-visible:ring-red-500" : cnpjValid ? "border-green-500 focus-visible:ring-green-500" : ""}`}
+            />
+            {cnpjError && <p className="mt-1 text-xs text-red-500">CNPJ inválido. Verifique os números.</p>}
+          </div>
+
+          <div>
             <Label htmlFor={final ? "final-city" : "city"} className="text-xs font-semibold">Cidade</Label>
             <Input
               id={final ? "final-city" : "city"}
@@ -304,7 +385,7 @@ export const LeadForm = ({ final = false }: LeadFormProps) => {
           </div>
 
           <div className="sm:col-span-2">
-            <Label className="text-xs font-semibold">Qual o seu objetivo hoje?</Label>
+            <Label className="text-xs font-semibold">O que você procura?</Label>
             <Select value={goal} onValueChange={(value) => { startForm(); setGoal(value); }}>
               <SelectTrigger className="mt-2">
                 <SelectValue placeholder="Selecione uma opção" />
@@ -315,9 +396,23 @@ export const LeadForm = ({ final = false }: LeadFormProps) => {
             </Select>
           </div>
 
+          {final && (
+            <div className="sm:col-span-2">
+              <Label className="text-xs font-semibold">Qual seu segmento?</Label>
+              <Select value={segment} onValueChange={(value) => { startForm(); setSegment(value); }}>
+                <SelectTrigger className="mt-2">
+                  <SelectValue placeholder="Selecione seu segmento" />
+                </SelectTrigger>
+                <SelectContent>
+                  {SEGMENTS.map((item) => <SelectItem key={item} value={item}>{item}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
           <div className="sm:col-span-2">
             <Label className="text-xs font-semibold">
-              Quanto pretende investir na próxima compra?
+              Qual o valor aproximado que você pretende investir na sua próxima compra?
             </Label>
             <Select value={investment} onValueChange={(value) => { startForm(); setInvestment(value); }}>
               <SelectTrigger className="mt-2">
@@ -335,30 +430,13 @@ export const LeadForm = ({ final = false }: LeadFormProps) => {
           variant="cta"
           size="xl"
           className="w-full animate-pulse-soft disabled:cursor-not-allowed disabled:opacity-60"
-          disabled={isSubmitting}
+          disabled={cnpjError || isSubmitting}
         >
           <Check className="h-5 w-5" />
-          {isSubmitting ? "Enviando dados..." : "Quero acessar o catálogo"}
+          {isSubmitting ? "Enviando dados..." : final ? "Quero receber as condições comerciais" : "Quero receber as condições"}
         </Button>
-        <div className="rounded-xl bg-primary-soft p-4">
-          <p className="text-sm font-bold text-primary-deep">O que você vai receber</p>
-          <ul className="mt-3 grid gap-2 text-sm text-foreground sm:grid-cols-2">
-            {[
-              "Catálogo atualizado",
-              "Produtos de maior giro",
-              "Sugestões de categorias",
-              "Condições comerciais",
-              "Atendimento especializado",
-            ].map((item) => (
-              <li key={item} className="flex items-center gap-2">
-                <Check className="h-4 w-4 shrink-0 text-primary" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
         <p className="text-center text-[11px] text-muted-foreground">
-          Atendimento destinado para empresas e revendedores. CNPJ poderá ser solicitado posteriormente pelo atendimento.
+          Atendimento destinado para empresas e revendedores. Condições comerciais sujeitas à análise cadastral.
         </p>
       </form>
     </div>

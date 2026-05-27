@@ -1,13 +1,12 @@
-import { Baby, HeartPulse, Home, Pill, ShoppingBag, Sparkles } from "lucide-react";
+import { Sparkles, SprayCan, HeartPulse, Scissors, ShieldCheck, PackageCheck } from "lucide-react";
 
 const categories = [
   { icon: Sparkles, title: "Cosméticos" },
-  { icon: HeartPulse, title: "Higiene Pessoal" },
-  { icon: Sparkles, title: "Perfumaria" },
-  { icon: Home, title: "Utilidades Domésticas" },
-  { icon: Baby, title: "Produtos Infantis" },
-  { icon: Pill, title: "Farmácia" },
-  { icon: ShoppingBag, title: "Conveniência" },
+  { icon: SprayCan, title: "Perfumaria" },
+  { icon: HeartPulse, title: "Higiene" },
+  { icon: Scissors, title: "Cuidados Capilares" },
+  { icon: ShieldCheck, title: "Limpeza" },
+  { icon: PackageCheck, title: "Utilidades" },
 ];
 
 export const Products = () => (
@@ -16,11 +15,14 @@ export const Products = () => (
       <div className="reveal mx-auto max-w-2xl text-center">
         <span className="text-sm font-bold uppercase tracking-wider text-primary">Categorias de venda</span>
         <h2 className="mt-2 font-display text-3xl font-extrabold text-balance sm:text-4xl">
-          Conheça algumas das categorias disponíveis
+          Produtos com alta procura para revenda
         </h2>
+        <p className="mt-3 text-muted-foreground">
+          Trabalhamos com categorias que possuem demanda constante e reposição frequente.
+        </p>
       </div>
 
-      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {categories.map(({ icon: Icon, title }, i) => (
           <div
             key={title}

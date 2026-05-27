@@ -2,20 +2,24 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 const faqs = [
   {
-    q: "Existe pedido mínimo?",
-    a: "Sim. Existem condições comerciais especiais para pedidos a partir de R$ 800.",
+    q: "Preciso ter CNPJ?",
+    a: "Sim. O atendimento é voltado para operações comerciais e revendedores formalizados.",
   },
   {
-    q: "Existe frete grátis?",
-    a: "Sim. Para Maranhão e Piauí conforme política comercial vigente.",
+    q: "Existe valor mínimo de compra?",
+    a: "As condições comerciais são apresentadas conforme análise do cadastro e perfil de compra.",
   },
   {
-    q: "Preciso ter empresa para comprar?",
-    a: "Atendemos principalmente empresas e revendedores formalizados. Nossa equipe orientará o melhor caminho conforme seu perfil.",
+    q: "Posso comprar para revender?",
+    a: "Sim.",
   },
   {
-    q: "Como recebo o catálogo?",
-    a: "Após o cadastro você receberá as informações e poderá ser atendido por um consultor.",
+    q: "Vocês entregam onde?",
+    a: "Maranhão e Piauí.",
+  },
+  {
+    q: "Recebo catálogo?",
+    a: "Sim, após aprovação do cadastro.",
   },
 ];
 

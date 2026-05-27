@@ -1,10 +1,10 @@
 import { Award, Boxes, Truck, Users } from "lucide-react";
 
 const items = [
-  { icon: Award, title: "Mais de 50 anos de mercado", desc: "Experiência atendendo empresas e revendedores." },
+  { icon: Award, title: "52 anos de mercado", desc: "Experiência atendendo empresas e revendedores." },
   { icon: Boxes, title: "+4.000 produtos", desc: "Diversas categorias para ampliar suas oportunidades de venda." },
   { icon: Truck, title: "Frete grátis MA e PI", desc: "Mais competitividade para sua operação." },
-  { icon: Users, title: "MA e PI", desc: "Mais de 50 anos abastecendo negócios no Maranhão e Piauí." },
+  { icon: Users, title: "+2.800 clientes atendidos", desc: "Empresas que compram regularmente conosco." },
 ];
 
 export const Differential = () => (
