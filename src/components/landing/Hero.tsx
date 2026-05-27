@@ -4,11 +4,12 @@ import { Brands } from "./Brands";
 import { Check } from "lucide-react";
 
 const bullets = [
+  "Produtos com alta procura",
   "Compra direto da distribuidora",
-  "Produtos com alta saída",
   "Frete grátis MA e PI",
-  "Mais de 52 anos de mercado",
   "Atendimento especializado",
+  "Mais de 50 anos de mercado",
+  "Oportunidades para lojistas e revendedores",
 ];
 
 const hero =
@@ -38,25 +39,25 @@ export const Hero = () => {
             href="#form"
             className="hidden rounded-full bg-accent px-4 py-2 text-xs font-bold text-accent-foreground shadow-cta transition-transform duration-200 hover:scale-105 sm:inline-block"
           >
-            Receber condições
+            Acessar catálogo
           </a>
         </div>
 
         {/* Left column */}
         <div className="mt-14 flex-1 text-white animate-float-up lg:mt-0">
           <span className="inline-flex items-center gap-2 rounded-full bg-accent px-3 py-1 text-xs font-bold text-accent-foreground">
-            Cadastro gratuito para empresas e revendedores
+            Cadastro gratuito para quem deseja revender ou abastecer seu negócio
           </span>
           <h1 className="mt-4 font-display text-3xl font-extrabold leading-[1.05] text-balance sm:text-4xl lg:text-5xl xl:text-6xl">
-            Revenda produtos de alta procura e <span style={{ color: '#FFD700' }}>lucre até 100%</span> comprando direto da distribuidora
+            Revenda produtos de alta procura e aumente seu faturamento comprando direto da distribuidora
           </h1>
           <p className="mt-4 max-w-xl text-base text-white/90 sm:text-lg">
             Mais de 4.000 produtos entre cosméticos, higiene, perfumaria e utilidades para quem deseja
-            abastecer seu negócio ou ampliar seu portfólio de revenda.
+            revender, abastecer sua loja ou ampliar seu mix de produtos.
           </p>
 
           <div className="mt-5 rounded-xl bg-white/95 px-4 py-3 text-sm font-bold text-primary-deep shadow-card">
-            Condições comerciais voltadas para operações com compras a partir de R$ 1.000.
+            Condições especiais para pedidos a partir de R$ 800.
           </div>
 
           <ul className="mt-6 grid gap-3 sm:grid-cols-2 sm:gap-4">
@@ -75,7 +76,7 @@ export const Hero = () => {
           </ul>
 
           <div className="mt-7">
-            <p className="text-sm font-bold text-white">+2.800 clientes atendidos</p>
+            <p className="text-sm font-bold text-white">Mais de 50 anos abastecendo negócios no Maranhão e Piauí</p>
             <Brands compact />
           </div>
         </div>

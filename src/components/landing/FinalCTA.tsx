@@ -1,7 +1,7 @@
 import { Check, Sparkles } from "lucide-react";
 import { LeadForm } from "./LeadForm";
 
-const benefits = ["Cadastro gratuito", "Atendimento especializado", "Condições comerciais", "Catálogo atualizado"];
+const benefits = ["Catálogo atualizado", "Produtos de maior giro", "Sugestões de categorias", "Condições comerciais"];
 
 export const FinalCTA = () => (
   <section className="relative overflow-hidden bg-primary py-20 text-primary-foreground sm:py-24">
@@ -11,13 +11,13 @@ export const FinalCTA = () => (
     <div className="container-tight relative grid items-center gap-10 lg:grid-cols-[1fr_460px]">
       <div className="reveal-left">
         <span className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-1.5 text-sm font-bold text-accent-foreground">
-          <Sparkles className="h-4 w-4" /> Atendimento voltado para compras a partir de R$ 1.000.
+          <Sparkles className="h-4 w-4" /> Condições especiais para pedidos a partir de R$ 800.
         </span>
         <h2 className="mt-5 max-w-3xl font-display text-3xl font-extrabold leading-tight text-balance text-white sm:text-4xl lg:text-5xl">
-          Receba acesso às condições comerciais da Rio Piranhas
+          Receba acesso ao catálogo e oportunidades de revenda
         </h2>
         <p className="mt-4 max-w-xl text-base text-white/90 sm:text-lg">
-          Preencha seus dados e descubra as oportunidades disponíveis para sua região.
+          Veja produtos, categorias e condições disponíveis para sua região.
         </p>
 
         <ul className="mt-7 grid gap-3 sm:grid-cols-2">

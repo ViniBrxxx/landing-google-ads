@@ -1,10 +1,11 @@
-import { ClipboardList, SearchCheck, MapPinned, PackageCheck } from "lucide-react";
+import { ClipboardList, MessageCircle, PackageCheck, SearchCheck, UserRoundCheck } from "lucide-react";
 
 const steps = [
-  { icon: ClipboardList, title: "Passo 1", desc: "Preencha seu cadastro." },
-  { icon: SearchCheck, title: "Passo 2", desc: "Nossa equipe analisa seu perfil comercial." },
-  { icon: MapPinned, title: "Passo 3", desc: "Você recebe as condições disponíveis para sua região." },
-  { icon: PackageCheck, title: "Passo 4", desc: "Escolha os produtos mais adequados ao seu negócio." },
+  { icon: ClipboardList, title: "Etapa 1", desc: "Solicite acesso ao catálogo." },
+  { icon: SearchCheck, title: "Etapa 2", desc: "Receba informações sobre produtos e oportunidades." },
+  { icon: MessageCircle, title: "Etapa 3", desc: "Converse com um consultor." },
+  { icon: UserRoundCheck, title: "Etapa 4", desc: "Receba orientação comercial conforme seu perfil." },
+  { icon: PackageCheck, title: "Etapa 5", desc: "Faça seu primeiro pedido." },
 ];
 
 export const HowItWorks = () => (
@@ -19,7 +20,7 @@ export const HowItWorks = () => (
 
       <div className="relative mt-12">
         <div className="absolute left-0 right-0 top-7 hidden h-1 rounded-full bg-gradient-blue lg:block" />
-        <div className="grid gap-6 lg:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
           {steps.map(({ icon: Icon, title, desc }, i) => (
             <div
               key={title}

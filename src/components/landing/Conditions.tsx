@@ -11,7 +11,7 @@ export const Conditions = () => (
         <p className="mt-4 text-muted-foreground">
           Nosso objetivo é atender empresas e revendedores que buscam ampliar seu faturamento através da
           compra direta da distribuidora. Cada cadastro passa por uma análise para garantir as melhores
-          condições comerciais.
+          condições comerciais para pedidos a partir de R$ 800.
         </p>
       </div>
 
